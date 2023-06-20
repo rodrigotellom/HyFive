@@ -167,16 +167,40 @@ Welcome to HyFive Source Code
       let color06;
       let color07;
       let color08;
+      let color09;
+      let color10;
+      let color11;
+      let color12;
+      let color13;
+      let color14;
+      let color15;
+      let color16;
+
+      // Sizes
+      let extraSmall = 20;
+      let small = 40;
+      let medium = 80;
+      let large = 160;
+      let extraLarge = 320;
+
+      // Functions
+      let drawCircle;
+      let accelerate = 0.981;
 
       function setup() {
         canvas = createCanvas(windowWidth, windowHeight);
         canvas.position(0, 0);
         canvas.style("z-index", "-1");
+        frameRate(12);
+        centerX = windowWidth / 2;
+        centerY = windowHeight / 2;
       }
 
       function draw() {
         background(255, 255 - 8, 255 - 16);
-        ellipse(50, 50, 80, 80);
+        noStroke();
+        fill(0, 0, 0);
+        ellipse(centerX, centerY, small, small);
       }
     </script>
     <!--HyFive code ends here -->

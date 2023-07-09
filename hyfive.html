@@ -156,51 +156,127 @@ Welcome to HyFive Source Code
       let centerX;
       let centerY;
 
-      // Shapes
-
       // Colors
-      let color01;
-      let color02;
-      let color03;
-      let color04;
-      let color05;
-      let color06;
-      let color07;
-      let color08;
-      let color09;
-      let color10;
-      let color11;
-      let color12;
-      let color13;
-      let color14;
-      let color15;
-      let color16;
+      let colors = {
+        color1: "#F6D55C",
+        color2: "#ED553B",
+        color3: "#3CAEA3",
+        color4: "#20639B",
+        color5: "#173F5F",
+      };
 
       // Sizes
-      let extraSmall = 20;
-      let small = 40;
-      let medium = 80;
-      let large = 160;
-      let extraLarge = 320;
+      let sizes = {
+        extraSmall: 20,
+        small: 40,
+        medium: 80,
+        large: 160,
+        extraLarge: 320,
+      };
 
-      // Functions
-      let drawCircle;
-      let accelerate = 0.981;
+      // Draggable shape class
+      class DraggableShape {
+        constructor(posX, posY, size, color) {
+          this.posX = posX;
+          this.posY = posY;
+          this.size = size;
+          this.color = color;
+          this.isDragging = false;
+          this.offsetX = 0;
+          this.offsetY = 0;
+        }
+
+        draw() {
+          // Check if the shape is being dragged
+          if (this.isDragging) {
+            this.posX = mouseX + this.offsetX;
+            this.posY = mouseY + this.offsetY;
+          }
+
+          // Draw the shape at its position
+          fill(this.color);
+          ellipse(this.posX, this.posY, this.size);
+        }
+
+        checkIfInsideShape() {
+          // Check if the mouse is inside the shape
+          let d = dist(mouseX, mouseY, this.posX, this.posY);
+          return d < this.size / 2;
+        }
+
+        startDragging() {
+          this.isDragging = true;
+          this.offsetX = this.posX - mouseX;
+          this.offsetY = this.posY - mouseY;
+        }
+
+        stopDragging() {
+          this.isDragging = false;
+        }
+      }
+
+      // Array to store draggable shapes
+      let draggableShapes = [];
 
       function setup() {
         canvas = createCanvas(windowWidth, windowHeight);
         canvas.position(0, 0);
         canvas.style("z-index", "-1");
-        frameRate(12);
+        frameRate(60);
         centerX = windowWidth / 2;
         centerY = windowHeight / 2;
+
+        // Create draggable shapes
+        draggableShapes.push(
+          new DraggableShape(centerX, centerY, sizes.small, colors.color1)
+        );
+
+        draggableShapes.push(
+          new DraggableShape(
+            centerX + 100,
+            centerY + 100,
+            sizes.medium,
+            "#000000"
+          )
+        );
       }
 
       function draw() {
         background(255, 255 - 8, 255 - 16);
         noStroke();
         fill(0, 0, 0);
-        ellipse(centerX, centerY, small, small);
+        ellipse(centerX, centerY, sizes.small, sizes.small);
+
+        // Draw draggable shapes
+        for (let i = 0; i < draggableShapes.length; i++) {
+          draggableShapes[i].draw();
+        }
+      }
+
+      function mousePressed() {
+        // Check if the mouse is inside any of the draggable shapes
+        for (let i = 0; i < draggableShapes.length; i++) {
+          if (draggableShapes[i].checkIfInsideShape()) {
+            draggableShapes[i].startDragging();
+          }
+        }
+      }
+
+      function mouseDragged() {
+        // Update position of the dragged shape
+        for (let i = 0; i < draggableShapes.length; i++) {
+          if (draggableShapes[i].isDragging) {
+            draggableShapes[i].posX = mouseX + draggableShapes[i].offsetX;
+            draggableShapes[i].posY = mouseY + draggableShapes[i].offsetY;
+          }
+        }
+      }
+
+      function mouseReleased() {
+        // Stop dragging the shape
+        for (let i = 0; i < draggableShapes.length; i++) {
+          draggableShapes[i].stopDragging();
+        }
       }
     </script>
     <!--HyFive code ends here -->

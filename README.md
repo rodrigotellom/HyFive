@@ -1,2 +1,2 @@
 # HyFive
-A computational art environment.
+Computational art environment.
